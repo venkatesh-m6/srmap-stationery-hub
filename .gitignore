@@ -1,12 +1,31 @@
-# Ignore dependencies
+# Dependencies
 node_modules/
+server/node_modules/
+client/node_modules/
 
-# Ignore database (so you don't overwrite live data)
-db.json
+# Environment variables
+server/.env
+.env
 
-# Ignore uploaded files
+# Build output
+client/dist/
+
+# Uploads (user-generated)
+server/uploads/orders/
+server/uploads/temp/
 uploads/
 
-# Ignore system files
+# OS files
 .DS_Store
 Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Database (legacy)
+db.json
