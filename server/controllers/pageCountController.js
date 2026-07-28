@@ -14,7 +14,9 @@ const countPages = (req, res) => {
     const filePath = req.file.path;
     const scriptPath = path.join(__dirname, '..', 'page_counter.py');
 
-    const python = spawn('python3', [scriptPath, filePath]);
+    // Use PYTHON_BIN env var to bypass pyenv shim overhead (2x faster)
+    const pythonBin = process.env.PYTHON_BIN || 'python3';
+    const python = spawn(pythonBin, [scriptPath, filePath]);
     let output = '';
     let errorOutput = '';
 

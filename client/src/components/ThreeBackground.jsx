@@ -90,10 +90,21 @@ export default function ThreeBackground() {
       };
       window.addEventListener('resize', handleResize);
 
+      // Pause animation when tab is hidden — prevents CPU/GPU throttling during dev
+      const handleVisibilityChange = () => {
+        if (document.hidden) {
+          cancelAnimationFrame(animationId);
+        } else {
+          animate();
+        }
+      };
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+
       return () => {
         cancelAnimationFrame(animationId);
         document.removeEventListener('mousemove', handleMouseMove);
         window.removeEventListener('resize', handleResize);
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
         renderer.dispose();
         paperGeometry.dispose();
         paperMaterial.dispose();

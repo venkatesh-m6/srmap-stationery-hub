@@ -8,6 +8,11 @@
     "dev": "nodemon server.js",
     "seed": "node seeds/seedPrices.js"
   },
+  "nodemonConfig": {
+    "ignore": ["uploads/*", "uploads/**/*", "*.log", "*.pdf", "*.jpg", "*.png"],
+    "ext": "js,json",
+    "delay": 500
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
