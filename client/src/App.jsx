@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -9,9 +9,12 @@ import Contact from './pages/Contact';
 import AdminLogin from './pages/Admin/AdminLogin';
 import Dashboard from './pages/Admin/Dashboard';
 
-export default function App() {
+function Layout() {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
+
   return (
-    <Router>
+    <>
       <ThreeBackground />
       <Toaster
         position="top-right"
@@ -33,11 +36,15 @@ export default function App() {
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<Dashboard />} />
       </Routes>
-      <Routes>
-        <Route path="/" element={<Footer />} />
-        <Route path="/services" element={<Footer />} />
-        <Route path="/contact" element={<Footer />} />
-      </Routes>
+      {!isAdmin && <Footer />}
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <Layout />
     </Router>
   );
 }

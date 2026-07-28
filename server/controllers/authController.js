@@ -5,13 +5,23 @@
 const login = (req, res) => {
     const { username, password } = req.body;
 
+    const expectedUser = process.env.ADMIN_USERNAME;
+    const expectedPass = process.env.ADMIN_PASSWORD;
+
+    console.log('--- LOGIN ATTEMPT ---');
+    console.log('Received:', JSON.stringify({ username, password }));
+    console.log('Expected:', JSON.stringify({ username: expectedUser, password: expectedPass }));
+    console.log('Body type:', typeof req.body, '| Body:', JSON.stringify(req.body));
+
     if (
-        username === process.env.ADMIN_USERNAME &&
-        password === process.env.ADMIN_PASSWORD
+        username === expectedUser &&
+        password === expectedPass
     ) {
         req.session.isAuthenticated = true;
+        console.log('✅ Login successful');
         res.json({ success: true, message: 'Login successful' });
     } else {
+        console.log('❌ Login failed - credentials mismatch');
         res.status(401).json({ success: false, error: 'Invalid credentials' });
     }
 };
