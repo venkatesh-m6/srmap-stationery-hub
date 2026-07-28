@@ -110,29 +110,28 @@ app.get('/api/health', (req, res) => {
 
 // ─── Start Server ───────────────────────────────────────────────────
 async function start() {
+    // Connect to MongoDB (non-fatal — server will start regardless)
     try {
-        // Connect to MongoDB
         await connectDB();
-
-        // Seed default prices if none exist
+        // Seed default prices only after successful DB connection
         await Price.getOrCreate();
         console.log('✅ Prices seeded / verified');
+    } catch (error) {
+        console.error(`⚠️  MongoDB unavailable: ${error.message}`);
+        console.warn('   Server starting anyway — DB-dependent routes will fail until MongoDB is reachable.');
+    }
 
-        // Start listening
-        server.listen(PORT, () => {
-            console.log(`
+    // Always start the HTTP server
+    server.listen(PORT, () => {
+        console.log(`
 ╔══════════════════════════════════════════════╗
 ║   SRMAP Stationery Hub Server               ║
 ║   Port: ${PORT}                                ║
 ║   Mode: ${isDummyMode ? 'DUMMY' : 'LIVE '}                              ║
 ║   WebSocket: ws://localhost:${PORT}             ║
 ╚══════════════════════════════════════════════╝
-            `);
-        });
-    } catch (error) {
-        console.error('❌ Server startup failed:', error);
-        process.exit(1);
-    }
+        `);
+    });
 }
 
 start();
