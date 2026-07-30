@@ -21,8 +21,24 @@ const server = http.createServer(app);
 const PORT = process.env.PORT || 5000;
 
 // ─── Middleware ──────────────────────────────────────────────────────
+const isProduction = process.env.NODE_ENV === 'production';
+
+// CORS: allow localhost in dev, Vercel frontend URL in production
+const allowedOrigins = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    process.env.FRONTEND_URL, // e.g. https://srmap-stationery.vercel.app
+].filter(Boolean);
+
 app.use(cors({
-    origin: true,
+    origin: (origin, callback) => {
+        // Allow requests with no origin (curl, mobile apps) or matching origins
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error(`CORS: origin ${origin} not allowed`));
+        }
+    },
     credentials: true
 }));
 app.use(express.json());
@@ -32,8 +48,9 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: false, // set to true in production with HTTPS
+        secure: isProduction,   // true on Render (HTTPS), false on localhost
         httpOnly: true,
+        sameSite: isProduction ? 'none' : 'lax', // 'none' required for cross-origin cookies
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
     }
 }));
