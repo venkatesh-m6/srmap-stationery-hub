@@ -54,7 +54,7 @@ export default function Contact() {
             <div className="map-placeholder">
               <iframe
                 title="SRMAP Location"
-                src="https://www.google.com/maps/place/SR+BLOCK+SRMAP/@16.4627665,80.5056251,18.14z/data=!4m14!1m7!3m6!1s0x3a35f3000d452a99:0xb22251dd1a6a3a51!2sSR+BLOCK+SRMAP!8m2!3d16.4627307!4d80.5068995!16s%2Fg%2F11lnwtkllw!3m5!1s0x3a35f3000d452a99:0xb22251dd1a6a3a51!8m2!3d16.4627307!4d80.5068995!16s%2Fg%2F11lnwtkllw?entry=ttu&g_ep=EgoyMDI2MDcyNy4wIKXMDSoASAFQAw%3D%3D"
+                src="https://maps.app.goo.gl/tEyx1ejYu3PTrjZy6"
                 width="100%"
                 height="100%"
                 style={{ border: 0, borderRadius: "var(--radius-lg)" }}
