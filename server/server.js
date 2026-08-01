@@ -116,14 +116,66 @@ app.use('/api/orders', createOrderRoutes(orderController));
 app.use('/api/prices', priceRoutes);
 app.use('/api/count-pages', pageCountRoutes);
 
-// Health check
+// ─── Root route — shows API status (visitors should use the frontend URL) ────
+app.get('/', (req, res) => {
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>SRMAP Stationery Hub — API Server</title>
+            <style>
+                body { font-family: -apple-system, sans-serif; background: #0c0a18; color: #f3f4f6;
+                       display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+                .card { background: #1f2937; border: 1px solid #374151; border-radius: 12px;
+                        padding: 2.5rem; max-width: 420px; text-align: center; }
+                h1 { color: #818cf8; font-size: 1.4rem; margin: 0 0 0.5rem; }
+                p { color: #9ca3af; font-size: 0.9rem; margin: 0.5rem 0; }
+                .badge { display: inline-block; background: #052e16; color: #4ade80;
+                         border: 1px solid #166534; border-radius: 999px; padding: 0.25rem 0.85rem;
+                         font-size: 0.8rem; font-weight: 600; margin: 1rem 0; }
+                a { display: inline-block; margin-top: 1.5rem; padding: 0.7rem 1.5rem;
+                    background: #4f46e5; color: white; border-radius: 8px; text-decoration: none;
+                    font-weight: 600; font-size: 0.9rem; }
+                a:hover { background: #4338ca; }
+                .divider { border: none; border-top: 1px solid #374151; margin: 1.5rem 0; }
+                .api-list { text-align: left; font-size: 0.78rem; color: #6b7280; }
+                .api-list code { color: #a5b4fc; }
+            </style>
+        </head>
+        <body>
+            <div class="card">
+                <div style="font-size:2rem;margin-bottom:0.5rem">🖨️</div>
+                <h1>SRMAP Stationery Hub</h1>
+                <p>Backend API Server</p>
+                <div class="badge">✅ Server is running</div>
+                <p>This is the API backend. The student-facing app is on the link below.</p>
+                <a href="${frontendUrl}" target="_blank">Open Stationery Hub →</a>
+                <hr class="divider">
+                <div class="api-list">
+                    <p><code>GET /api/health</code> — Server health check</p>
+                    <p><code>POST /api/auth/login</code> — Admin login</p>
+                    <p><code>GET /api/orders</code> — All orders</p>
+                    <p><code>GET /api/prices</code> — Print prices</p>
+                </div>
+            </div>
+        </body>
+        </html>
+    `);
+});
+
+// Health check (JSON — for uptime monitors)
 app.get('/api/health', (req, res) => {
     res.json({
         status: 'ok',
+        service: 'SRMAP Stationery Hub API',
         razorpay: isDummyMode ? 'dummy' : 'live',
         timestamp: new Date().toISOString()
     });
 });
+
 
 // ─── Start Server ───────────────────────────────────────────────────
 async function start() {
