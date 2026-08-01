@@ -9,7 +9,14 @@
     "seed": "node seeds/seedPrices.js"
   },
   "nodemonConfig": {
-    "ignore": ["uploads/*", "uploads/**/*", "*.log", "*.pdf", "*.jpg", "*.png"],
+    "ignore": [
+      "uploads/*",
+      "uploads/**/*",
+      "*.log",
+      "*.pdf",
+      "*.jpg",
+      "*.png"
+    ],
     "ext": "js,json",
     "delay": 500
   },
@@ -20,6 +27,7 @@
     "express-session": "^1.18.2",
     "mongoose": "^7.6.3",
     "multer": "^1.4.5-lts.1",
+    "pdf-parse": "^1.1.1",
     "razorpay": "^2.9.2",
     "ws": "^8.18.3"
   },
