@@ -23,19 +23,24 @@ const PORT = process.env.PORT || 5000;
 // ─── Middleware ──────────────────────────────────────────────────────
 const isProduction = process.env.NODE_ENV === 'production';
 
-// CORS: allow localhost in dev, Vercel frontend URL in production
+// CORS: allow localhost in dev + explicit FRONTEND_URL + all *.vercel.app previews
 const allowedOrigins = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
-    process.env.FRONTEND_URL, // e.g. https://srmap-stationery.vercel.app
+    process.env.FRONTEND_URL, // e.g. https://srmap-stationery-hub.vercel.app
 ].filter(Boolean);
 
 app.use(cors({
     origin: (origin, callback) => {
-        // Allow requests with no origin (curl, mobile apps) or matching origins
-        if (!origin || allowedOrigins.includes(origin)) {
+        // Allow: no origin (curl / mobile), exact match, or any *.vercel.app subdomain
+        if (
+            !origin ||
+            allowedOrigins.includes(origin) ||
+            /^https:\/\/[a-z0-9-]+\.vercel\.app$/.test(origin)
+        ) {
             callback(null, true);
         } else {
+            console.warn(`CORS blocked: ${origin}`);
             callback(new Error(`CORS: origin ${origin} not allowed`));
         }
     },
