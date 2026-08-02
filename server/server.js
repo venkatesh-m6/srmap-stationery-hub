@@ -10,6 +10,7 @@ const session = require('express-session');
 const cors = require('cors');
 const path = require('path');
 const http = require('http');
+const fs = require('fs');
 const { WebSocketServer } = require('ws');
 
 const connectDB = require('./config/db');
@@ -19,6 +20,14 @@ const Price = require('./models/Price');
 const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT || 5000;
+
+// ─── Ensure upload directories exist (Render filesystem is ephemeral) ──
+const uploadsTemp   = path.join(__dirname, 'uploads', 'temp');
+const uploadsOrders = path.join(__dirname, 'uploads', 'orders');
+fs.mkdirSync(uploadsTemp,   { recursive: true });
+fs.mkdirSync(uploadsOrders, { recursive: true });
+console.log('✅ Upload directories ready');
+
 
 // ─── Middleware ──────────────────────────────────────────────────────
 const isProduction = process.env.NODE_ENV === 'production';
