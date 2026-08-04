@@ -132,6 +132,11 @@ export default function Home() {
 
   const totalPrice = calculateClientPrice(options);
   const phoneValid = /^\d{10}$/.test(options.phone.trim());
+  const pickupEstimate = options.rush
+    ? "Pickup in about 15 minutes"
+    : fileType === "image"
+      ? "Pickup the same day at the counter"
+      : "Standard pickup in 1–2 hours";
 
   const processPayment = async () => {
     if (!currentFile) return;
@@ -499,6 +504,11 @@ export default function Home() {
                     <span>+₹{RUSH_FEE}</span>
                   </div>
                 )}
+              </div>
+
+              <div className="summary-row" style={{ fontSize: "0.8rem", color: "#c7d2fe" }}>
+                <span>Pickup</span>
+                <span>{pickupEstimate}</span>
               </div>
 
               <div className="summary-total">
